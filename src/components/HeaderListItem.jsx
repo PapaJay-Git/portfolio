@@ -10,7 +10,7 @@ const HeaderListItem = ({ initialActive, title, sectionName}) => {
             to={sectionName}
             spy={true}
             smooth={true}
-            offset={-100}
+            offset={-150}
             duration={500}
             className={`${initialActive ? 'active' : ''}`}
           >

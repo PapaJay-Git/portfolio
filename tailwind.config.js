@@ -12,6 +12,9 @@ export default {
         'custom-dark-blue': '#050c16',
         'custom-black': '#040c16',
       },
+      screens: {
+        'xs': '400px',
+      }
     },
   },
   plugins: [],

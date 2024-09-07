@@ -1,6 +1,7 @@
 import MainButton from "./MainButton";
 import HeaderListItem from "./HeaderListItem";
 import {useEffect, useState} from "react";
+import FontSizeContainer from "./FontSizeContainer";
 
 const Header = () => {
 
@@ -33,15 +34,19 @@ const Header = () => {
         <section
             className={`${scrolled
             ? 'bg-custom-black'
-            : 'bg-transparent'} fixed w-full transition-colors duration-500 ease-in-out z-50`}>
+            : 'bg-transparent'} fixed w-full transition-colors duration-500 ease-in-out z-50 overflow-hidden`}>
             <nav
-                className=" bg-transparent w-full text-white flex justify-between px-3 py-5 items-center lg:container mx-auto">
-                <div>
-                    <img src="/src/assets/svgs/logo-light.svg" alt="Logo"/>
+                className=" bg-transparent text-gray-200 flex justify-between px-3 py-5 items-center lg:container mx-auto">
+                <div className="flex flex-row gap-2 items-center">
+                    <img src="/src/assets/svgs/logo.svg" alt="Logo" className="h-10 w-10"/>
+                    <FontSizeContainer size="2xl">JAYSON</FontSizeContainer>
                 </div>
                 <div className="flex justify-between items-center gap-x-20">
                     <ul className="hidden justify-between items-center gap-x-10 lg:flex">
-                        <HeaderListItem sectionName="home" title={"HOME"} initialActive={initialActive}/>
+                        <HeaderListItem
+                            sectionName="home"
+                            title={"HOME"}
+                            initialActive={initialActive}/>
                         <HeaderListItem sectionName="about_me" title={"ABOUT ME"}/>
                         <HeaderListItem sectionName="projects" title={"PROJECTS"}/>
                     </ul>

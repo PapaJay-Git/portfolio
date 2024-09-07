@@ -2,9 +2,9 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 
 import {Autoplay} from 'swiper/modules';
-import GradientSection from './GradientSection';
-import FontSizeContainer from './FontSizeContainer';
-import Container from './Container';
+import GradientSection from '../containers/GradientSection';
+import FontSizeContainer from '../texts/FontSizeContainer';
+import Container from '../containers/Container';
 
 const Technologies = () => {
     const autoplay = {

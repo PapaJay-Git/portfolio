@@ -1,12 +1,12 @@
 import {Element} from "react-scroll";
-import GradientSection from "./GradientSection";
-import GridContainer from "./GridContainer";
-import TitleContainer from "./TitleContainer";
-import FontSizeContainer from "./FontSizeContainer";
-import TransparentCard from "./TransparentCard";
-import MainButton from "./MainButton";
-import ArrowSvg from "./ArrowSvg";
-import CardShowcase from "./CardShowcase";
+import GradientSection from "../containers/GradientSection";
+import GridContainer from "../containers/GridContainer";
+import TitleContainer from "../texts/TitleContainer";
+import FontSizeContainer from "../texts/FontSizeContainer";
+import TransparentCard from "../cards/TransparentCard";
+import MainButton from "../buttons/MainButton";
+import ArrowSvg from "../visuals/ArrowSvg";
+import CardShowcase from "../cards/CardShowcase";
 
 const About = () => {
 

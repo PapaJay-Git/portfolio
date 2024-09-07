@@ -1,14 +1,14 @@
 import {useState, useEffect} from "react";
-import MainButton from "./MainButton";
-import GradientSection from "./GradientSection";
-import TitleContainer from "./TitleContainer";
-import SocialMediaButton from "./SocialMediaButton";
+import MainButton from "../buttons/MainButton";
+import GradientSection from "../containers/GradientSection";
+import TitleContainer from "../texts/TitleContainer";
+import SocialMediaButton from "../buttons/SocialMediaButton";
 import {TypeAnimation} from 'react-type-animation';
-import FontSizeContainer from "./FontSizeContainer";
+import FontSizeContainer from "../texts/FontSizeContainer";
 
 import {Element} from 'react-scroll';
-import GridContainer from "./GridContainer";
-import ArrowSvg from "./ArrowSvg";
+import GridContainer from "../containers/GridContainer";
+import ArrowSvg from "../visuals/ArrowSvg";
 
 const Home = () => {
     const [sequence,

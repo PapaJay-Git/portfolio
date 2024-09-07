@@ -1,12 +1,12 @@
-import ImageModalContent from "./ImageModalContent";
-import FontSizeContainer from "./FontSizeContainer";
+import ImageContent from "../visuals/ImageContent";
+import FontSizeContainer from "../texts/FontSizeContainer";
 
 export default function ModalProject({data}){
 
     return (
         <div className="grid grid-cols-12 p-4">
             <div className="col-span-12 xl:col-span-6">
-                <ImageModalContent imageUrl={data?.imageUrl} />
+                <ImageContent imageUrl={data?.imageUrl} />
             </div>
             <div className="col-span-12 xl:col-span-6 text-gray-600 xl:ps-5 mt-3">
                 <FontSizeContainer size="lg">

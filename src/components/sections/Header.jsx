@@ -1,7 +1,7 @@
-import MainButton from "./MainButton";
-import HeaderListItem from "./HeaderListItem";
+import MainButton from "../buttons/MainButton";
+import HeaderListItem from "../texts/HeaderListItem";
 import {useEffect, useState} from "react";
-import FontSizeContainer from "./FontSizeContainer";
+import FontSizeContainer from "../texts/FontSizeContainer";
 
 const Header = () => {
 
@@ -30,6 +30,19 @@ const Header = () => {
         };
     }, []);
 
+    const listsOfTabs = (
+        <>
+            <HeaderListItem
+                sectionName="home"
+                title={"HOME"}
+                initialActive={initialActive}/>
+            <HeaderListItem sectionName="about_me" title={"ABOUT ME"}/>
+            <HeaderListItem sectionName="projects" title={"PROJECTS"}/>
+            <HeaderListItem sectionName="services" title={"SERVICES"}/>
+            <HeaderListItem sectionName="contact" title={"CONTACT"}/>
+        </>
+    );
+
     return (
         <section
             className={`${scrolled
@@ -43,12 +56,7 @@ const Header = () => {
                 </div>
                 <div className="flex justify-between items-center gap-x-20">
                     <ul className="hidden justify-between items-center gap-x-10 lg:flex">
-                        <HeaderListItem
-                            sectionName="home"
-                            title={"HOME"}
-                            initialActive={initialActive}/>
-                        <HeaderListItem sectionName="about_me" title={"ABOUT ME"}/>
-                        <HeaderListItem sectionName="projects" title={"PROJECTS"}/>
+                        {listsOfTabs}
                     </ul>
                     <div>
                         <span className="hidden lg:block">
@@ -68,9 +76,7 @@ const Header = () => {
                 ? 'block'
                 : 'hidden'} lg:hidden`}>
                 <ul className="lg:container mx-auto flex flex-col gap-y-3 px-3 py-2">
-                    <HeaderListItem title={"HOME"} sectionName="home"/>
-                    <HeaderListItem title={"ABOUT ME"} sectionName="about_me"/>
-                    <HeaderListItem title={"PROJECTS"} sectionName="projects"/>
+                    {listsOfTabs}
                 </ul>
             </div>
         </section>

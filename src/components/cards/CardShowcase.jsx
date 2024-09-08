@@ -17,7 +17,6 @@ const CardShowcase = () => {
     ];
 
     return (cardData.map((cardDatum, index) => (
-
         <TransparentCard key={index} additionalClasses="w-full h-auto z-10">
             <FontSizeContainer size="lg" additionalClass="p-3 md:p-5 bg-custom-blue">
                 <p>{cardDatum.title}</p>

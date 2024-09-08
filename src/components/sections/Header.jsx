@@ -1,7 +1,9 @@
-import MainButton from "../buttons/MainButton";
+
 import HeaderListItem from "../texts/HeaderListItem";
 import {useEffect, useState} from "react";
 import FontSizeContainer from "../texts/FontSizeContainer";
+import BurgerButton from "../buttons/BurgerButton";
+import SpyButton from "../buttons/SpyButton";
 
 const Header = () => {
 
@@ -30,16 +32,22 @@ const Header = () => {
         };
     }, []);
 
+    const burgerActivator = () => {
+        setIsBurgerActive((prev) => !prev);
+        console.log(1);
+    };
+
     const listsOfTabs = (
         <>
             <HeaderListItem
-                sectionName="home"
+                onClick={burgerActivator}
+                sectionName="hero"
                 title={"HOME"}
                 initialActive={initialActive}/>
-            <HeaderListItem sectionName="about_me" title={"ABOUT ME"}/>
-            <HeaderListItem sectionName="projects" title={"PROJECTS"}/>
-            <HeaderListItem sectionName="services" title={"SERVICES"}/>
-            <HeaderListItem sectionName="contact" title={"CONTACT"}/>
+            <HeaderListItem onClick={burgerActivator} sectionName="about_me" title={"ABOUT ME"}/>
+            <HeaderListItem onClick={burgerActivator} sectionName="projects" title={"PROJECTS"}/>
+            <HeaderListItem onClick={burgerActivator} sectionName="services" title={"SERVICES"}/>
+            <HeaderListItem onClick={burgerActivator} sectionName="contact" title={"CONTACT"}/>
         </>
     );
 
@@ -60,13 +68,9 @@ const Header = () => {
                     </ul>
                     <div>
                         <span className="hidden lg:block">
-                            <MainButton>LETS' TALK</MainButton>
+                            <SpyButton sectionName="contact">LETS' TALK</SpyButton>
                         </span>
-                        <button
-                            className="block lg:hidden border-gray-600 border-[1px] rounded-md p-2"
-                            onClick={() => setIsBurgerActive((prev) => !prev)}>
-                            <img src="/src/assets/svgs/burger.svg" alt="Menu" className=" w-7 h-7 "/>
-                        </button>
+                        <BurgerButton setIsBurgerActive={() => setIsBurgerActive((prev) => !prev)}/>
                     </div>
                 </div>
 

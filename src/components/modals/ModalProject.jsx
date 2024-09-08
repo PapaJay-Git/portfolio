@@ -12,9 +12,12 @@ export default function ModalProject({data}){
                 <FontSizeContainer size="lg">
                         {data?.title}
                 </FontSizeContainer>
-                <FontSizeContainer size="sm" additionalClass="my-5 font-thin">
+                <hr className="my-3" />
+                <FontSizeContainer size="sm" additionalClass="my-4 font-thin">
                         {data?.description}
                 </FontSizeContainer>
+                
+                <hr className="my-3" />
                 <FontSizeContainer size="sm" additionalClass="font-thin">
                         {data?.technologies}
                 </FontSizeContainer>

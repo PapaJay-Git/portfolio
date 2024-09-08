@@ -5,6 +5,9 @@ import {Autoplay} from 'swiper/modules';
 import GradientSection from '../containers/GradientSection';
 import FontSizeContainer from '../texts/FontSizeContainer';
 import Container from '../containers/Container';
+import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
+import AnimatedSection from "../animations/AnimatedSection";
 
 const Technologies = () => {
     const autoplay = {
@@ -67,30 +70,42 @@ const Technologies = () => {
             logo: '/src/assets/svgs/vue.svg'
         }
     ];
+
+
+    const animationSettings = (delay) => {
+        return {
+            initial: { opacity: 0, y: 20 },
+            animate: { opacity: 1, y: 0},
+            transition: { duration: delay},
+        }
+      };
+      
     return (
         <GradientSection >
             <Container disableGrid={true}>
-                <Swiper
-                    breakpoints={breakpoints}
-                    spaceBetween={10}
-                    grabCursor={true}
-                    autoplay={autoplay}
-                    loop={true}
-                    modules={[Autoplay]}>
+                <AnimatedSection animationSettings={animationSettings(2)}>
+                    <Swiper
+                        breakpoints={breakpoints}
+                        spaceBetween={10}
+                        grabCursor={true}
+                        autoplay={autoplay}
+                        loop={true}
+                        modules={[Autoplay]}>
 
-                    {technologies.map(technology => (
-                        <SwiperSlide
-                            key={technology.name}
-                            className="flex items-center gap-3 py-10 text-nowrap font-light ">
-                            <img
-                                src={technology.logo}
-                                alt={technology.name + " Logo"}
-                                className="w-1/2 h-auto max-h-12"/>
-                            <FontSizeContainer size='sm'>{technology.name}</FontSizeContainer>
-                        </SwiperSlide>
-                    ))}
+                        {technologies.map(technology => (
+                            <SwiperSlide
+                                key={technology.name}
+                                className="flex items-center gap-3 py-10 text-nowrap font-light ">
+                                <img
+                                    src={technology.logo}
+                                    alt={technology.name + " Logo"}
+                                    className="w-1/2 h-auto max-h-12"/>
+                                <FontSizeContainer size='sm'>{technology.name}</FontSizeContainer>
+                            </SwiperSlide>
+                        ))}
 
-                </Swiper>
+                    </Swiper>
+                </AnimatedSection>
             </Container>
         </GradientSection>
     );

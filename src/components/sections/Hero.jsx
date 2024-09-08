@@ -66,7 +66,7 @@ const Hero = () => {
                     </div>
                     <div className="col-span-12 lg:col-span-7 flex justify-center mt-10 lg:mt-32 lg:ps-10">
                         <img
-                            src={heroBanner} className="w-full lg:w-[70%] h-auto object-cover"
+                            src={heroBanner} className="w-full lg:w-[80%]  sm:h-[600px]  md:h-[700px] xl:h-[550px] 2xl:h-[650px] object-cover bg-gray-800"
                             />
                     </div>
                 </GridContainer>

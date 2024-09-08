@@ -28,11 +28,12 @@ const About = () => {
                     <div
                         className="col-span-12 lg:col-span-6 flex items-center justify-center py-10 lg:py-24 lg:pe-10 relative">
                         <div className="absolute bottom-5 left-0 h-2/3 w-1/2 bg-custom-dark-blue"/> 
-                        <div className="z-10 p-2 md:p-10">
+                        <div className="z-10 p-2 xs:p-10 f-full w-full flex justify-center">
                             <AnimatedSection animationSettings={animationSettings(1.5)}>
-                                <TransparentCard>
-                                    <img src={aboutMeImg} alt="About me"/>
-                                </TransparentCard>
+                                <img 
+                                src={aboutMeImg} 
+                                alt="About me" 
+                                className="w-full h-auto xs:h-[300px]  sm:h-[400px]  md:h-[450px] xl:h-[600px] 2xl:h-[700px] object-cover bg-gray-800 border border-gray-400 rounded-xl "/>
                             </AnimatedSection>
 
                         </div>

@@ -3,12 +3,13 @@ import GradientSection from "../containers/GradientSection";
 import GridContainer from "../containers/GridContainer";
 import TitleContainer from "../texts/TitleContainer";
 import FontSizeContainer from "../texts/FontSizeContainer";
-import TransparentCard from "../cards/TransparentCard";
 import SpyButton from "../buttons/SpyButton";
 import ArrowSvg from "../visuals/ArrowSvg";
 import CardShowcase from "../cards/CardShowcase";
 import AnimatedSection from "../animations/AnimatedSection";
 import aboutMeImg from "./../../assets/images/about-me.jpeg"
+
+import ImageWithLoading from "../visuals/ImageWithLoading";
 
 const About = () => {
 
@@ -30,10 +31,7 @@ const About = () => {
                         <div className="absolute bottom-5 left-0 h-2/3 w-1/2 bg-custom-dark-blue"/> 
                         <div className="z-10 p-2 xs:p-10 f-full w-full flex justify-center">
                             <AnimatedSection animationSettings={animationSettings(1.5)}>
-                                <img 
-                                src={aboutMeImg} 
-                                alt="About me" 
-                                className="w-full h-auto xs:h-[300px]  sm:h-[400px]  md:h-[450px] xl:h-[600px] 2xl:h-[700px] object-cover bg-gray-800 border border-gray-400 rounded-xl "/>
+                                <ImageWithLoading src={aboutMeImg} alt="About me" classNames={"w-full h-auto xs:h-[300px]  sm:h-[400px]  md:h-[450px] xl:h-[600px] 2xl:h-[700px] object-cover bg-gray-800 border border-gray-400 rounded-xl overflow-hidden"} />
                             </AnimatedSection>
 
                         </div>

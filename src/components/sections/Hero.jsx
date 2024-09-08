@@ -13,6 +13,7 @@ import ArrowSvg from "../visuals/ArrowSvg";
 import { motion } from 'framer-motion';
 
 import heroBanner from "./../../assets/images/hero-banner.jpg"
+import ImageWithLoading from "../visuals/ImageWithLoading";
 
 const Hero = () => {
     const sequence = ['WEB DEVELOPER', 2000, 'PROBLEM SOLVER', 2000, 'WEB INNOVATOR', 2000];
@@ -65,9 +66,7 @@ const Hero = () => {
                         </div>
                     </div>
                     <div className="col-span-12 lg:col-span-7 flex justify-center mt-10 lg:mt-32 lg:ps-10">
-                        <img
-                            src={heroBanner} className="w-full lg:w-[80%]  sm:h-[600px]  md:h-[700px] xl:h-[550px] 2xl:h-[650px] object-cover bg-gray-800"
-                            />
+                        <ImageWithLoading src={heroBanner} alt={"Home Banner"} classNames="w-full lg:w-[80%]  sm:h-[600px]  md:h-[600px] lg:h-[550px] 2xl:h-[650px] object-cover bg-gray-800" />
                     </div>
                 </GridContainer>
             </GradientSection>

@@ -28,10 +28,16 @@ const Technologies = () => {
         disableOnInteraction: false
     };
     const breakpoints = {
-        0: {
+        200: {
+            slidesPerView: 1
+        },
+        300: {
             slidesPerView: 2
         },
-        400: {
+        500: {
+            slidesPerView: 2.5
+        },
+        700: {
             slidesPerView: 3
         },
         992: {

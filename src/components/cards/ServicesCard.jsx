@@ -9,8 +9,7 @@ export default function ServicesCard({data, delay}) {
     return (
         <div className="col-span-12 md:col-span-6 lg:col-span-3 w-full ">
             <AnimatedSection animationSettings={ {initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0}, transition: { duration: delay} }}>
-                <TransparentCard
-                    additionalClasses="w-full h-[340px] lg:h-[380px] xl:h-[450px] relative border-0">
+                <div className="overflow-hidden bg-transparent border-0 border-gray-400 rounded-xl w-full h-[340px] lg:h-[380px] xl:h-[450px] relative">
                     <div className="absolute top-0 left-0 w-full h-full opacity-60">
                         <ImageContent imageUrl={data
                             ?.url} additionalClasses=""/>
@@ -28,7 +27,7 @@ export default function ServicesCard({data, delay}) {
                         <p className="border-t border-gray-400"/>
                         <StarRating/>
                     </div>
-                </TransparentCard>
+                </div>
             </AnimatedSection>
         </div>
     );

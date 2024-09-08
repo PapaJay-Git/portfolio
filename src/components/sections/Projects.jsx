@@ -15,7 +15,7 @@ import AnimatedSection from "../animations/AnimatedSection";
 
 import DRHM from "./../../assets/images/DRHM.png"
 import cemetery from "./../../assets/images/cemetery.png"
-import inventory from "./../../assets/images/inventory.png"
+import inventory from "./../../assets/images/Inventory.png"
 import ticketing from "./../../assets/images/ticketing.png"
 import POS from "./../../assets/images/POS.png"
 

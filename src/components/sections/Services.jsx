@@ -5,27 +5,32 @@ import FontSizeContainer from "../texts/FontSizeContainer";
 import GridContainer from "../containers/GridContainer";
 import ServicesCard from "../cards/ServicesCard";
 
+import webApplication from "./../../assets/images/web-application.jfif"
+import fullStack from "./../../assets/images/full-stack.jpg"
+import webSupport from "./../../assets/images/web-support.jpg"
+import apiIntegration from "./../../assets/images/api-integration.jpg"
+
 export default function Services() {
     const webDevelopmentProjects = [
         {
             title: "Web Application Development",
             description: "I create dynamic and interactive web applications that provide a seamless user experience and meet specific business requirements.",
-            url: 'src/assets/images/web-application.jfif'
+            url: webApplication
         },
         {
             title: "Full Stack Development",
             description: "I offer end-to-end development services, handling both the frontend and backend to deliver comprehensive and functional solutions.",
-            url: 'src/assets/images/full-stack.jpg'
+            url: fullStack
         },
         {
             title: "Website Maintenance & Support",
             description: "I provide ongoing maintenance and support to keep your website running smoothly, including updates, bug fixes, and performance enhancements.",
-            url: 'src/assets/images/web-support.jpg'
+            url: webSupport
         },
         {
             title: "API Development & Integration",
             description: "I develop and integrate APIs to enable seamless communication between systems and enhance functionality across platforms.",
-            url: 'src/assets/images/api-integration.jpg'
+            url: apiIntegration
         }
     ];
     

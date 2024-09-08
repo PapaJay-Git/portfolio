@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import FontSizeContainer from "../texts/FontSizeContainer";
 import BurgerButton from "../buttons/BurgerButton";
 import SpyButton from "../buttons/SpyButton";
+import logo from "./../../assets/svgs/logo.svg"
 
 const Header = () => {
 
@@ -59,7 +60,7 @@ const Header = () => {
             <nav
                 className=" bg-transparent text-gray-200 flex justify-between px-3 py-5 items-center lg:container mx-auto">
                 <div className="flex flex-row gap-2 items-center">
-                    <img src="/src/assets/svgs/logo.svg" alt="Logo" className="h-10 w-10"/>
+                    <img src={logo} alt="Logo" className="h-10 w-10"/>
                     <FontSizeContainer size="2xl">JAYSON</FontSizeContainer>
                 </div>
                 <div className="flex justify-between items-center gap-x-20">

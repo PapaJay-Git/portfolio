@@ -1,7 +1,9 @@
+import arrowRight from "./../../assets/svgs/arrow-right.svg"
+
 const ArrowSvg = ({ sizeClass = "h-5 w-5"}) => {
 
     return (<img
-        src="/src/assets/svgs/arrow-right.svg"
+        src={arrowRight}
         alt="Arrow-right"
         className={sizeClass}/>);
 };

@@ -13,6 +13,12 @@ import 'swiper/css/pagination';
 import {FreeMode, Pagination} from 'swiper/modules';
 import AnimatedSection from "../animations/AnimatedSection";
 
+import DRHM from "./../../assets/images/DRHM.png"
+import cemetery from "./../../assets/images/cemetery.png"
+import inventory from "./../../assets/images/inventory.png"
+import ticketing from "./../../assets/images/ticketing.png"
+import POS from "./../../assets/images/POS.png"
+
 export default function Projects({openModal}) {
     const animationSettings = (delay) => {
         return {
@@ -41,32 +47,32 @@ export default function Projects({openModal}) {
             description: `I developed a dynamic landing page designed to effectively showcase the company's services and experience. The page features an interactive and visually appealing layout crafted to engage potential clients and highlight key offerings. Its design ensures a seamless and attractive user experience, presenting the company's capabilities and achievements in a compelling manner.`,
             technologies: 'HTML, CSS, JavaScript, Tailwind CSS, Animate.css, Owl Carousel, and Animate.js',
             shortDescription: 'Front-end Development',
-            imageUrl: 'src/assets/images/DRHM.png'
+            imageUrl: DRHM
         }, {
             title: 'Cemetery Tombstone Management',
             description: `I developed a comprehensive tombstone locator system with integrated e-payment functionality for a cemetery. This system allows users to efficiently locate tombstones and make payments online. It features an intuitive interface for searching and viewing tombstone locations, and a secure, user-friendly payment process. The solution is designed to streamline cemetery operations and enhance the user experience for managing and locating memorials.`,
             technologies: 'Laravel, MySQL, Bootstrap 5, HTML, CSS, JavaScript, Leaflet.js, DataTables, PHPMailer, and SweetAlert2',
             shortDescription: 'Full-stack Development',
-            imageUrl: 'src/assets/images/cemetery.png'
+            imageUrl: cemetery
         }, {
             title: 'Barangay Form Inventory System',
             description: 'I developed a versatile form inventory system tailored for a barangay, featuring six types of forms. This system enables efficient management and generation of forms, which can be output as PDFs. It provides a streamlined process for creating, tracking, and handling various forms, enhancing administrative efficiency and ensuring seamless document management.',
             technologies: 'Laravel, MySQL, Bootstrap 5, HTML, CSS, JavaScript, DomPDF, DataTables, PHPMailer, and SweetAlert2',
             shortDescription: 'Full-stack Development',
-            imageUrl: 'src/assets/images/inventory.png'
+            imageUrl: inventory
         },
         {
             title: 'Ticketing System',
             description: 'I developed a sophisticated department-based ticketing system designed to streamline communication and manage issues effectively. This system features real-time notifications, integrated chat functionality, and satisfaction reviews, enhancing user interaction and support efficiency. It provides a dynamic and responsive interface, offering instant updates, seamless communication, and actionable feedback. The platform is tailored to improve departmental operations, ensuring a smooth and efficient process for handling support requests and boosting overall productivity.',
             technologies: `Laravel, MySQL, CSS, HTML, JavaScript, jQuery, Bootstrap 5, Pusher JS, Chart.js, DomPDF, Flatpickr, Laravel Echo, SweetAlert2, Video.js, and DataTables.`,
             shortDescription: 'Full-stack Development',
-            imageUrl: 'src/assets/images/ticketing.png'
+            imageUrl: ticketing
         }, {
             title: 'POS System',
             description: 'I designed and developed the user interface for a Point of Sale (POS) system, focusing on creating an intuitive and efficient experience for users. The interface features a visually appealing and responsive layout that ensures a smooth, user-friendly interaction. It enhances transaction processes and improves operational efficiency, providing a seamless and effective solution for point-of-sale needs.',
             technologies: ' Laravel, Laravel Inertia, Vue.js, HTML, CSS, JavaScript, and Bootstrap 5',
             shortDescription: 'Front-end Development',
-            imageUrl: 'src/assets/images/POS.png'
+            imageUrl: POS
         }, 
     ];
     return (

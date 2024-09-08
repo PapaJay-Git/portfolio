@@ -5,9 +5,22 @@ import {Autoplay} from 'swiper/modules';
 import GradientSection from '../containers/GradientSection';
 import FontSizeContainer from '../texts/FontSizeContainer';
 import Container from '../containers/Container';
-import { useInView } from 'react-intersection-observer';
-import { motion } from 'framer-motion';
 import AnimatedSection from "../animations/AnimatedSection";
+
+import react from "./../../assets/svgs/react.svg"
+import css from "./../../assets/svgs/css.svg"
+import bootstrap from "./../../assets/svgs/bootstrap.svg"
+import html from "./../../assets/svgs/html.svg"
+import javascript from "./../../assets/svgs/javascript.svg"
+import php from "./../../assets/svgs/php.svg"
+import jquery from "./../../assets/svgs/jquery.svg"
+import laravel from "./../../assets/svgs/laravel.svg"
+import pusher from "./../../assets/svgs/pusher.svg"
+import sql from "./../../assets/svgs/sql.svg"
+import mysql from "./../../assets/svgs/mysql.svg"
+import tailwind from "./../../assets/svgs/tailwind.svg"
+import vue from "./../../assets/svgs/vue.svg"
+
 
 const Technologies = () => {
     const autoplay = {
@@ -31,43 +44,43 @@ const Technologies = () => {
     const technologies = [
         {
             name: 'React.js',
-            logo: '/src/assets/svgs/react.svg'
+            logo: react
         }, {
             name: 'CSS',
-            logo: '/src/assets/svgs/css.svg'
+            logo: css
         }, {
             name: 'Bootstrap 5',
-            logo: '/src/assets/svgs/bootstrap.svg'
+            logo: bootstrap
         }, {
             name: 'HTML',
-            logo: '/src/assets/svgs/html.svg'
+            logo: html
         }, {
             name: 'JavaScript',
-            logo: '/src/assets/svgs/javascript.svg'
+            logo: javascript
         }, {
             name: 'PHP',
-            logo: '/src/assets/svgs/php.svg'
+            logo: php
         }, {
             name: 'jQuery',
-            logo: '/src/assets/svgs/jquery.svg'
+            logo: jquery
         }, {
             name: 'Pusher',
-            logo: '/src/assets/svgs/pusher.svg'
+            logo: pusher
         }, {
             name: 'Laravel',
-            logo: '/src/assets/svgs/laravel.svg'
+            logo: laravel
         }, {
             name: 'SQL',
-            logo: '/src/assets/svgs/sql.svg'
+            logo: sql
         }, {
             name: 'MySQL',
-            logo: '/src/assets/svgs/mysql.svg'
+            logo: mysql
         }, {
             name: 'Tailwind',
-            logo: '/src/assets/svgs/tailwind.svg'
+            logo: tailwind
         }, {
             name: 'Vue.js',
-            logo: '/src/assets/svgs/vue.svg'
+            logo: vue
         }
     ];
 

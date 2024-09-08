@@ -8,6 +8,7 @@ import SpyButton from "../buttons/SpyButton";
 import ArrowSvg from "../visuals/ArrowSvg";
 import CardShowcase from "../cards/CardShowcase";
 import AnimatedSection from "../animations/AnimatedSection";
+import aboutMeImg from "./../../assets/images/about-me.jpeg"
 
 const About = () => {
 
@@ -30,7 +31,7 @@ const About = () => {
                         <div className="z-10 p-2 md:p-10">
                             <AnimatedSection animationSettings={animationSettings(1.5)}>
                                 <TransparentCard>
-                                    <img src="src/assets/images/about-me.jpeg" alt="About me"/>
+                                    <img src={aboutMeImg} alt="About me"/>
                                 </TransparentCard>
                             </AnimatedSection>
 

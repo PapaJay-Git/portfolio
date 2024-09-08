@@ -40,27 +40,29 @@ const About = () => {
                     <div
                         className="col-span-12 lg:col-span-6 flex justify-center flex-col pb-10 lg:py-24 relative">
                         <div className="absolute top-0 right-0 h-1/2 w-1/2 bg-custom-dark-blue "/>
-                        <TitleContainer title="ABOUT ME"/>
-                        <AnimatedSection animationSettings={animationSettings(1.5)}>
-                            <FontSizeContainer size="2xl">
-                                <p>I AM AVAILABLE FOR</p>
-                                <p className="text-custom-light-blue">WEB PROJECTS</p>
-                            </FontSizeContainer>
-                            <FontSizeContainer size="sm">
-                                <p className="pt-3">
-                                    From dynamic websites to custom web applications, I’m here to turn your digital vision into reality. Let’s build something exceptional together!
-                                </p>
-                            </FontSizeContainer>
-                            <div className="flex flex-row gap-2 py-4">
-                                <CardShowcase/>
+                            <TitleContainer title="ABOUT ME"/>
+                            <div className="relative">
+                                <AnimatedSection animationSettings={animationSettings(1.5)}>
+                                    <FontSizeContainer size="2xl">
+                                        <p>I AM AVAILABLE FOR</p>
+                                        <p className="text-custom-light-blue">WEB PROJECTS</p>
+                                    </FontSizeContainer>
+                                    <FontSizeContainer size="sm">
+                                        <p className="pt-3">
+                                            From dynamic websites to custom web applications, I’m here to turn your digital vision into reality. Let’s build something exceptional together!
+                                        </p>
+                                    </FontSizeContainer>
+                                    <div className="flex flex-row gap-2 py-4">
+                                        <CardShowcase/>
+                                    </div>
+                                    <div className="mt-5 w-fit">
+                                        <SpyButton sectionName="contact">
+                                            GET IN TOUCH
+                                            <ArrowSvg/>
+                                        </SpyButton>
+                                    </div>
+                                </AnimatedSection>
                             </div>
-                            <div className="mt-5 w-fit">
-                                <SpyButton sectionName="contact">
-                                    GET IN TOUCH
-                                    <ArrowSvg/>
-                                </SpyButton>
-                            </div>
-                        </AnimatedSection>
                     </div>
                 </GridContainer>
             </GradientSection>

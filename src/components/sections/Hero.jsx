@@ -12,6 +12,8 @@ import ArrowSvg from "../visuals/ArrowSvg";
 
 import { motion } from 'framer-motion';
 
+import heroBanner from "./../../assets/images/hero-banner.jpg"
+
 const Hero = () => {
     const sequence = ['WEB DEVELOPER', 2000, 'PROBLEM SOLVER', 2000, 'WEB INNOVATOR', 2000];
 
@@ -64,7 +66,7 @@ const Hero = () => {
                     </div>
                     <div className="col-span-12 lg:col-span-7 flex justify-center mt-10 lg:mt-32 lg:ps-10">
                         <img
-                            src="src/assets/images/hero-banner.jpg" className="w-full lg:w-[70%] h-auto object-cover"
+                            src={heroBanner} className="w-full lg:w-[70%] h-auto object-cover"
                             />
                     </div>
                 </GridContainer>

@@ -11,24 +11,25 @@ export default function Experience() {
         {
             position: "Web Developer",
             workplace: "ONSITE",
-            duration: "SEPT 2023 - APRIL 2024",
+            duration: "2023 - 2024",
             type: "FULL TIME",
             company: "Enjin Corp.",
             description: `Developed a department-based, social media-like Ticketing System featuring real-time notifications, chat functionality, and satisfaction reviews, alongside an ATM-like Pay Slip System and a POS System user interface. These solutions leveraged a diverse stack of technologies, including Laravel, Vue.js, MySQL, MS SQL, JavaScript, Tailwind CSS, and Bootstrap 5, integrating various tools to ensure dynamic functionality, intuitive design, and seamless user experiences across platforms.`
         }, {
             position: "Web Developer",
             workplace: "REMOTE",
-            duration: "DEC 2022 - FEB 2023",
+            duration: "2022 - 2023",
             type: "PART TIME",
             company: "Myo Clinic",
             description: `Developed a fully responsive and interactive clinic website using HTML5, CSS, Bootstrap 5, JavaScript, MySQL, and PHP. The website allows clinic administrators to easily upload and manage dynamic content, including clinic information, services, staff details, and operating hours. With a user-friendly interface, the site enables real-time updates, ensuring patients always have access to the latest information. The website is optimized for performance, mobile-friendly, and designed with intuitive navigation to enhance the user experience, making it easy for visitors to find the clinic’s offerings and contact information quickly.`
-        }, {
+        },
+        {
             position: "Web Developer",
             workplace: "REMOTE",
-            duration: "APRIL 2024 - MAY 2024",
+            duration: "APRIL 2024 - SEPTEMBER 2024",
             type: "PART TIME",
-            company: "DRHM Consultation Company",
-            description: `Developed a dynamic, visually engaging landing page to showcase company services and experience using the Laravel Framework, HTML, CSS, JavaScript, Tailwind CSS, Animate.css, Owl Carousel, and Animate.js. This interactive platform was designed to captivate potential clients, featuring smooth animations, responsive layouts, and an intuitive interface that highlights the company's expertise and service offerings. The combination of modern web technologies ensures a seamless user experience, making the landing page both functional and aesthetically appealing across all devices.`
+            company: "Multiple Freelance Clients",
+            description: `Designed and developed dynamic, visually appealing landing pages and websites for various clients using the Laravel Framework, HTML, CSS, JavaScript, Tailwind CSS, Animate.css, Owl Carousel, and Animate.js. Focused on creating responsive layouts, smooth animations, and user-friendly interfaces that effectively showcased client services and expertise. The use of modern web technologies ensured functionality, performance, and aesthetic appeal across all devices, enhancing the online presence of multiple businesses.`
         }
     ];
 

@@ -5,10 +5,10 @@ const CardShowcase = () => {
 
     const cardData = [
         {
-            title: "5+",
+            title: "10+",
             description: "Projects Developed"
         }, {
-            title: "1+",
+            title: "1.5+",
             description: "Years Experience"
         }, {
             title: "10+",

@@ -29,7 +29,7 @@ export default function Experience() {
             duration: "APRIL 2024 - SEPTEMBER 2024",
             type: "PART TIME",
             company: "Multiple Freelance Clients",
-            description: `Designed and developed dynamic, visually appealing landing pages and websites for various clients using the Laravel Framework, HTML, CSS, JavaScript, Tailwind CSS, Animate.css, Owl Carousel, and Animate.js. Focused on creating responsive layouts, smooth animations, and user-friendly interfaces that effectively showcased client services and expertise. The use of modern web technologies ensured functionality, performance, and aesthetic appeal across all devices, enhancing the online presence of multiple businesses.`
+            description: `Worked on diverse projects including dynamic landing pages, a cemetery locator system with e-payment integration, a barangay form inventory system, and a guidance assessment system, all built using the Laravel Framework. Leveraged modern web technologies such as HTML, CSS, JavaScript, Tailwind CSS, Animate.css, Owl Carousel, and Animate.js to create responsive and user-friendly interfaces. Each system was tailored to meet specific client needs, ensuring seamless functionality, performance, and an engaging user experience across various devices.`
         }
     ];
 

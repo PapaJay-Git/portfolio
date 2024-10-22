@@ -34,12 +34,13 @@ export default function Experience() {
         }, 
         {
             position: "Web Developer",
-            workplace: "ONSITE",
-            duration: "September 2023 - April 2024",
-            type: "FULL TIME",
-            company: "Enjin Corp.",
-            description: `Developed a department-based, social media-like Ticketing System featuring real-time notifications, chat functionality, and satisfaction reviews, alongside an ATM-like Pay Slip System and a POS System user interface. These solutions leveraged a diverse stack of technologies, including Laravel, Vue.js, MySQL, MS SQL, JavaScript, Tailwind CSS, Bootstrap 5, and GitHub for version control. Implemented real-time messaging and notifications using Pusher.js and Laravel WebSockets, ensuring dynamic functionality and seamless user experiences across platforms.`
+            workplace: "REMOTE",
+            duration: "2022 - 2023",
+            type: "PART TIME",
+            company: "Myo Clinic",
+            description: `Designed and developed a fully responsive, interactive website for Myo Clinic, utilizing HTML5, CSS, Bootstrap 5, JavaScript, MySQL, and PHP. The platform enables clinic administrators to efficiently manage dynamic content, including service offerings, staff profiles, and operating hours, with real-time updates. The website is optimized for performance and mobile compatibility, providing patients with seamless access to up-to-date information. The intuitive design ensures a user-friendly experience, enhancing the clinic’s online presence and making it easier for visitors to navigate the site and engage with clinic services.`
         }
+
     ];
 
     return (

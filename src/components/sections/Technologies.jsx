@@ -20,6 +20,7 @@ import sql from "./../../assets/svgs/sql.svg"
 import mysql from "./../../assets/svgs/mysql.svg"
 import tailwind from "./../../assets/svgs/tailwind.svg"
 import vue from "./../../assets/svgs/vue.svg"
+import github from "./../../assets/svgs/github.svg"
 
 
 const Technologies = () => {
@@ -87,6 +88,9 @@ const Technologies = () => {
         }, {
             name: 'Vue.js',
             logo: vue
+        }, {
+            name: 'Github',
+            logo: github
         }
     ];
 

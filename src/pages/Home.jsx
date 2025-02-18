@@ -10,6 +10,7 @@ import Services from "../components/sections/Services";
 import Experience from "../components/sections/Experience";
 import Contact from "../components/sections/Contact";
 
+// Minor Changes
 const Home = () => {
     const [isModalOpen,
         setIsModalOpen] = useState(false);

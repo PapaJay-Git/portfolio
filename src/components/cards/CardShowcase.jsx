@@ -8,7 +8,7 @@ const CardShowcase = () => {
             title: "10+",
             description: "Projects Developed"
         }, {
-            title: "1.5+",
+            title: "2+",
             description: "Years Experience"
         }, {
             title: "10+",

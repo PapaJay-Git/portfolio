@@ -12,7 +12,7 @@ export default function CardProject({openModal, data}) {
                 <div 
                     className="bg-custom-black w-[300px] h-[200px] sm:w-[350px] sm:h-[250px] md:w-[380px] md:h-[270px] lg:w-[400px] lg:h-[280px] rounded-lg overflow-hidden" 
                     onClick={() => openModal?.(<ImageContent imageUrl={data?.imageUrl} />)}>
-                    <ImageWithLoading src={data?.imageUrl} alt={data?.title} classNames={"h-full w-full object-cover bg-black hover:opacity-50 cursor-pointer transition-all duration-500 ease-in-out transform hover:scale-110"}  />
+                    <ImageWithLoading src={data?.imageUrl} alt={data?.title} classNames={"h-full w-full object-cover bg-black hover:opacity-50 cursor-pointer transition-all duration-500 ease-in-out transform hover:scale-110 opacity-60"}  />
                 </div>
 
                 <div className="flex justify-between items-center mt-5 ">

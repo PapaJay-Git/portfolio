@@ -21,6 +21,16 @@ import mysql from "./../../assets/svgs/mysql.svg"
 import tailwind from "./../../assets/svgs/tailwind.svg"
 import vue from "./../../assets/svgs/vue.svg"
 import github from "./../../assets/svgs/github.svg"
+import api from "./../../assets/svgs/api.svg"
+import clickUp from "./../../assets/svgs/click-up.svg"
+import graphQL from "./../../assets/svgs/graph-ql.svg"
+import expressJS from "./../../assets/svgs/express-js.svg"
+import nextJS from "./../../assets/svgs/next-js.svg"
+import nodeJS from "./../../assets/svgs/node-js.svg"
+import prisma from "./../../assets/svgs/prisma.svg"
+import redis from "./../../assets/svgs/redis.svg"
+import stripe from "./../../assets/svgs/stripe.svg"
+import typescript from "./../../assets/svgs/typescript.svg"
 
 
 const Technologies = () => {
@@ -91,9 +101,38 @@ const Technologies = () => {
         }, {
             name: 'Github',
             logo: github
+        }, {
+            name: 'API Integration',
+            logo: api
+        }, {
+            name: 'Click Up',
+            logo: clickUp
+        }, {
+            name: 'GraphQL',
+            logo: graphQL
+        }, {
+            name: 'Express.js',
+            logo: expressJS
+        }, {
+            name: 'Next.js',
+            logo: nextJS
+        }, {
+            name: 'Node.js',
+            logo: nodeJS
+        }, {
+            name: 'Prisma ORM',
+            logo: prisma
+        }, {
+            name: 'Redis',
+            logo: redis
+        }, {
+            name: 'Stripe',
+            logo: stripe
+        }, {
+            name: 'Typescript',
+            logo: typescript
         }
     ];
-
 
     const animationSettings = (delay) => {
         return {

@@ -17,9 +17,9 @@ The burst and sustained limiters applied to every request. The sensitive one gua
 
 Reports came in that saving didn't work, mostly from owners filling in property questionnaires. Those forms auto-save as you type, and we had just shipped a new version of them.
 
-That timing made the questionnaire feel like an obvious suspect. A form that saves on every change sends far more requests than one with a submit button. I went into the auto-save, fixed it, and shipped.
+That timing made the questionnaire feel like an obvious suspect. A form that saves on every change sends far more requests than one with a submit button. I added debouncing to the auto-save, so it waited for the user to pause typing before sending a request, and shipped.
 
-The errors kept coming.
+The errors kept coming. The debounce was a reasonable improvement, but it wasn't the problem.
 
 ## The actual signal
 

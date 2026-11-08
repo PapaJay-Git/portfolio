@@ -29,6 +29,6 @@ export const posts: Post[] = [
     summary:
       "My first export guessed at types and broke on import. The second read the Prisma schema instead, and the cutover was uneventful.",
     date: "2026-11-08",
-    draft: true,
+    draft: false,
   },
 ];

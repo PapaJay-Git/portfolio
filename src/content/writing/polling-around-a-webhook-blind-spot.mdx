@@ -1,10 +1,10 @@
-I built a pipeline that mirrors Hostaway, a property-management system, into our own PostgreSQL, so The Host Desk's AI assistant can answer questions from fresh data. Guest conversations were the part that mattered most, and they had a gap I didn't see until I went looking for it.
+I built a pipeline that mirrors Hostaway, a property-management system, into our own PostgreSQL, so The Host Desk's AI assistant can answer questions from fresh data. Guest conversations were the part that mattered most, and they came with a known gap that webhooks alone could never close.
 
 ## The gap
 
 Hostaway sends a webhook when a guest message arrives. It does **not** send one when someone replies from inside Hostaway itself. So our mirror always had the guest's question, but the host's answer only showed up when some other sync happened to fetch that conversation.
 
-Nothing errored. The data was just quietly incomplete for a few minutes at a time. I noticed it by comparing conversations in the mirror against Hostaway directly. Messages we'd sent were consistently showing up late, around **3–4 minutes** behind.
+I knew this going in. It's a property of Hostaway's webhook coverage, not a bug to discover. The question was never *whether* to fill the gap, but how to fill it without wrecking everything else. Left to the regular syncs, replies sent from Hostaway showed up in our mirror around **3–4 minutes** late, and nothing errored while they were missing.
 
 ## Why "just poll it" doesn't work
 
@@ -39,7 +39,7 @@ I also moved the settings into the database: intervals, conversation counts, pri
 
 ## The bug in the scheduler
 
-Running two tiers on one inbox created a starvation problem I only caught by watching the logs. Each connection allows one inbox job at a time. The quick tier comes due every two minutes; the deep tier once an hour. When both were due, quick often won the free slot, and by the time it finished, quick was nearly due again. The hourly deep pass could be pushed back indefinitely.
+Running two tiers on one inbox created a starvation problem. Each connection allows one inbox job at a time. The quick tier comes due every two minutes; the deep tier once an hour. When both were due, quick often won the free slot, and by the time it finished, quick was nearly due again. The hourly deep pass could be pushed back indefinitely.
 
 The fix was a few explicit rules:
 

@@ -29,7 +29,7 @@ This is the largest module, at about 20,000 lines, and the core of the business.
 Some details that took the most care:
 
 - **Money moves only at the end.** The card is authorized when the owner accepts, and charged only after the work is reviewed. The platform fee is kept as an application fee, and the vendor's share goes out as a Stripe Connect transfer.
-- **Reality changes mid-job.** When a guest cancels a Hostaway reservation, any work orders tied to it have to react. Jobs that haven't started are cancelled. Jobs already in progress go to manual review instead of being silently cancelled out from under a vendor.
+- **Reality changes mid-job.** When a guest cancels a Hostaway reservation, any work orders tied to it are cancelled automatically, so a vendor is never sent to clean a stay that no longer exists.
 - **Vendors are businesses, not individuals.** A vendor company has sub-vendor crews, assigned to jobs by grade: primary, secondary, tertiary, backup, specialist. That modelling choice touches assignment, notifications, payouts and permissions.
 
 ### Everything around it

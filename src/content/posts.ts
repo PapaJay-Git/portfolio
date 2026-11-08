@@ -20,8 +20,8 @@ export const posts: Post[] = [
     title: "Polling around a webhook blind spot",
     summary:
       "The integration only notified us about messages we received, never ones we sent. Here is how we closed the gap without blowing the API budget.",
-    date: "2026-11-22",
-    draft: true,
+    date: "2026-11-08",
+    draft: false,
   },
   {
     slug: "sql-server-to-postgres-in-one-evening",

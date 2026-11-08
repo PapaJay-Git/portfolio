@@ -12,8 +12,8 @@ export const posts: Post[] = [
     title: "The rate limiter that broke my own users",
     summary:
       "A wave of 429s, a feature I was sure was to blame, and what it taught me about sizing limits from real traffic.",
-    date: "2026-11-15",
-    draft: true,
+    date: "2026-11-08",
+    draft: false,
   },
   {
     slug: "polling-around-a-webhook-blind-spot",

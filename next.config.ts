@@ -9,4 +9,4 @@ const nextConfig: NextConfig = {
   turbopack: { root: path.resolve(".") },
 };
 
-export default createMDX({})(nextConfig);
+export default createMDX({ options: { remarkPlugins: ["remark-gfm"] } })(nextConfig);

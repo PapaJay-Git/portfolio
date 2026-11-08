@@ -24,11 +24,11 @@ export const posts: Post[] = [
     draft: false,
   },
   {
-    slug: "sql-server-to-postgres-in-one-evening",
-    title: "SQL Server to Postgres in one evening",
+    slug: "sql-server-to-postgres-let-the-schema-drive-the-export",
+    title: "SQL Server to Postgres: let the schema drive the export",
     summary:
-      "The tooling, the checklist, and the verification that made a solo production migration boring.",
-    date: "2026-11-29",
+      "My first export guessed at types and broke on import. The second read the Prisma schema instead, and the cutover was uneventful.",
+    date: "2026-11-08",
     draft: true,
   },
 ];

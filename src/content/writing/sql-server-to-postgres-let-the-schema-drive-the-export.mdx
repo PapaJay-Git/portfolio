@@ -1,0 +1,74 @@
+In January 2026 I moved The Host Desk's production database from SQL Server to self-hosted PostgreSQL, on my own. The [case study](/work/postgres-migration) covers why. This post is about the part that actually took the time: getting the data across correctly.
+
+## The setup
+
+The backend already used Prisma, which helped a lot. Prisma could create every table on Postgres from the same schema file, so the application barely changed. What was left was moving the data: 162 models' worth of rows, a few hundred megabytes in total, including work orders and payment records that had to arrive exactly as they left.
+
+A generic dump-and-restore between two different engines wasn't attractive. SQL Server's export formats don't load into Postgres as-is, and the failure mode of "mostly right" was the one I couldn't accept. So I wrote the export myself, inside the API:
+
+- Read each table through the Prisma client, 500 rows at a time.
+- Write Postgres `INSERT` statements, 100 rows per statement, into one SQL file.
+- Wrap the whole file in a single transaction, so an import either fully succeeds or leaves nothing behind.
+- After each table with an auto-increment ID, reset its sequence to the highest imported ID, so the next insert doesn't collide.
+
+## Freezing the system first
+
+An export that runs while users are writing is a snapshot of nothing in particular. Before exporting, I froze the API: a middleware that answered every request with an error, and all eight background processors switched off. With nothing able to write, the export, the import and the comparison afterwards were all looking at the same data.
+
+## Version one guessed, and it showed
+
+The first exporter decided how to write each value by looking at the value. Strings got quoted, numbers didn't, and a hardcoded list said which tables used string IDs. It produced a file, and the file didn't import.
+
+The problems were all the same shape: SQL Server's representation of a value wasn't Postgres's.
+
+- **Booleans.** SQL Server stores them as `BIT`, so they arrived as `0` and `1`. Postgres wants `true` and `false`.
+- **Decimals.** Some decimal values came out as quoted strings, so the file contained `'"0"'`, which Postgres rejects as a numeric.
+- **JSON.** Stored as text on SQL Server, `JSONB` on Postgres, with its own escaping rules.
+- **IDs.** A hand-maintained list of which tables used string IDs is exactly the kind of list that's wrong for one table you forgot.
+
+Each of these could be patched individually. But every patch was another guess, and I would only find the next one when an import failed.
+
+## Version two read the schema
+
+The fix was to stop guessing. The Prisma schema already says exactly what every column is, so the exporter should read it.
+
+I wrote a small parser for `schema.prisma` that pulls out, for every model, each field's type, whether it's optional, any database-level type annotation, whether it's a relation, and what its default is. The exporter then converts each value by its declared type, not by what it looks like:
+
+| Declared type | Conversion |
+|---|---|
+| `Boolean` | `0`/`1` → `false`/`true` |
+| `Decimal` | strip stray quotes, write as a bare number |
+| `DateTime` | ISO 8601 timestamp |
+| `Json` | serialize, then escape for Postgres |
+| `Bytes` | hex-encoded |
+| `String` | quote-escaped |
+
+The same metadata answered the other questions for free. Relation fields are skipped because they aren't columns. Tables whose IDs default to `autoincrement()` get a sequence reset; tables using UUIDs or CUIDs don't. The hardcoded ID list was deleted.
+
+The rewrite landed a few hours after the first version, and the type errors stopped.
+
+## The error the schema didn't fix
+
+The next import failed differently: a foreign-key violation. A history table that references subscriptions was being inserted before the subscriptions table. Its rows pointed at subscriptions that didn't exist yet.
+
+The table order was a list I'd written by hand, grouped into dependency levels. Three tables were in the wrong level. Fixing them meant moving them after their parent, and then checking every other table that referenced the same parent. There were 23.
+
+There's a detail here worth knowing. The export file started with `SET CONSTRAINTS ALL DEFERRED`, which looks like it should postpone foreign-key checks until the end of the transaction. It doesn't, in this case. That statement only affects constraints declared `DEFERRABLE`, and the foreign keys Prisma creates aren't. So the insert order mattered all along, and the line that seemed to cover for it did nothing.
+
+## Verifying before switching
+
+Before any traffic touched Postgres:
+
+- A verification script confirmed that every table in the export order mapped to a real Prisma model, and listed the ones that were skipped on purpose.
+- I compared the imported data against a side-by-side backup of the original.
+
+Then the services were pointed at Postgres. The cutover fit inside the planned window, and nothing broke afterwards.
+
+## What I'd do differently
+
+- **Derive the table order from the schema too.** I had already parsed every relation for the type work. A topological sort over those relations would have produced the insert order automatically, and the foreign-key bug could not have happened.
+- **Page by primary key, not by offset.** The exporter paged with skip and take and no explicit ordering. Without an `ORDER BY`, the database doesn't promise the same row order from one page to the next. The freeze made it safe in practice, but ordering by ID with a "greater than the last ID" cursor is correct by construction.
+- **Automate the row-count check.** Per-table counts on both sides, compared by a script and printed as numbers, would have made the verification something I could rerun and show, not just something I did.
+- **Freeze with `503` and `Retry-After`.** The freeze returned `403 Forbidden`, which says "you're not allowed". `503 Service Unavailable` says "come back later", which is what was actually true, and it's what clients and monitoring expect during maintenance.
+
+The lesson I took from it: when you already have a precise description of your data, make every tool read it. Every bug in this migration came from a place where I wrote down something the schema already knew.

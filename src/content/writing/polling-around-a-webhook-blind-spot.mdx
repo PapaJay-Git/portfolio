@@ -1,0 +1,60 @@
+I built a pipeline that mirrors Hostaway, a property-management system, into our own PostgreSQL, so The Host Desk's AI assistant can answer questions from fresh data. Guest conversations were the part that mattered most, and they came with a known gap that webhooks alone could never close.
+
+## The gap
+
+Hostaway sends a webhook when a guest message arrives. It does **not** send one when someone replies from inside Hostaway itself. So our mirror always had the guest's question, but the host's answer only showed up when some other sync happened to fetch that conversation.
+
+I knew this going in. It's a property of Hostaway's webhook coverage, not a bug to discover. The question was never *whether* to fill the gap, but how to fill it without wrecking everything else. Left to the regular syncs, replies sent from Hostaway showed up in our mirror around **3–4 minutes** late, and nothing errored while they were missing.
+
+## Why "just poll it" doesn't work
+
+Hostaway rate-limits hard. Every call the pipeline makes goes through a shared Redis sliding-window limiter with two buckets, both measured over 10 seconds:
+
+- **Per IP:** 12 requests, a little under Hostaway's cap of 15, because all our workers share one egress address.
+- **Per account:** 18 requests, a little under Hostaway's cap of 20.
+
+That budget already has to cover incremental syncs, backfills of years of reservations, and webhook follow-ups. Polling every conversation on a short interval would eat it. Polling rarely would leave the gap in place.
+
+## Two tiers instead of one interval
+
+What I actually needed was two different things, so I built them separately:
+
+| Tier | Every | Covers | Purpose |
+|---|---|---|---|
+| Quick | 2 minutes | 25 most recent conversations | Catch replies on threads that are active right now |
+| Deep | 1 hour | 100 conversations | Catch anything the quick tier missed |
+
+Almost all new outbound messages land on recently active conversations, so a small, frequent window catches most of them cheaply. The deep pass is the safety net.
+
+The arithmetic is what made me comfortable with it. A quick pass costs about one request to list the conversations, plus one per conversation for messages: roughly **26 requests every two minutes per connection**. Against an account budget of 18 requests every 10 seconds, that's a small, predictable slice. The rest stays free for syncs and backfills.
+
+## Making it a first-class job
+
+The first version ran the poll like any other sync job. That caused two problems:
+
+- **It queued behind backfills.** A freshness check stuck behind a long historical import isn't fresh. I gave inbox jobs their **own parallel lane**, so they never wait on bulk work.
+- **The stale-job watchdog misread it.** A job that runs every two minutes, forever, looked like something stuck. I exempted the inbox lane from it.
+
+I also moved the settings into the database: intervals, conversation counts, priority and on/off switches, with validation bounds. That way, tuning the cadence for a connection is a settings change, not a redeploy. Later I combined the conversation and message fetches into one job to save requests.
+
+## The bug in the scheduler
+
+Running two tiers on one inbox created a starvation problem. Each connection allows one inbox job at a time. The quick tier comes due every two minutes; the deep tier once an hour. When both were due, quick often won the free slot, and by the time it finished, quick was nearly due again. The hourly deep pass could be pushed back indefinitely.
+
+The fix was a few explicit rules:
+
+- **When deep is due, it runs alone.** Quick is held until deep has been enqueued.
+- **Deep stays immediately due while the inbox is busy.** It doesn't slide back by the usual retry delay, so it claims the slot the moment the current job finishes.
+- **A failed deep pass doesn't count as a finished one.** Otherwise one error would reset its clock and hand the inbox to quick for another hour.
+
+Each rule is a few lines. Finding them took longer than writing the whole poller.
+
+## Result
+
+Outbound message lag went from about **3–4 minutes to about 1 minute** (observed), within the rate budget. The AI assistant's view of a conversation now includes the host's side of it, which is what made its answers trustworthy.
+
+## What I'd tell myself at the start
+
+- **Assume webhooks are incomplete until you've proven otherwise.** Check exactly which events fire, and in which direction, before treating them as the source of truth.
+- **Budget polling explicitly.** Write down the requests each job costs per interval and compare them to the limit. It turns "will this get us rate-limited?" into arithmetic.
+- **Two schedules sharing one slot need priority rules.** If a frequent job and a rare one compete for the same resource, the rare one loses unless you say otherwise.

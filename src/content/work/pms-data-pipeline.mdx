@@ -1,0 +1,62 @@
+import { Flow } from "@/components/Flow";
+
+## Context
+
+The Host Desk's AI assistant answers questions about a customer's properties, such as upcoming reservations, revenue, and guest conversations. To do that well, it needs that data **continuously, locally, and queryable**, not fetched live from a third-party API on every prompt.
+
+The source is Hostaway, a property-management system with a strict rate limit. Calling it on demand was too slow, too fragile, and too expensive against the rate budget. The CEO decided to split this into its own service. I designed and built it alone, from March to October 2026: architecture, code, tests, and deployment.
+
+## Constraints
+
+- **A hard rate limit** shared by every kind of request: backfills, incremental syncs, and webhook follow-ups.
+- **Webhooks with a blind spot.** Hostaway notifies you about messages you *receive*, but not about messages sent from inside Hostaway itself.
+- **Long histories.** Backfilling an account means years of reservations and conversations, which can't happen in one request burst.
+- **Production data**, mirrored for an AI that would answer real customers from it.
+
+## Architecture
+
+<Flow
+  title="Pipeline shape"
+  steps={[
+    { label: "Scheduler + webhooks", note: "What needs syncing, and when" },
+    { label: "Job queue", note: "Deduped, guarded, claimable" },
+    { label: "Workers", note: "Advisory-locked per account / resource" },
+    { label: "Rate limiter", note: "Redis-backed request budget" },
+    { label: "Raw + normalized store", note: "PostgreSQL" },
+  ]}
+/>
+
+- **An API plus separately scalable worker replicas.** The API takes requests and webhooks; workers do the syncing.
+- **A Postgres job queue built for this workload:** fingerprint deduplication, so the same sync isn't queued twice; connection and coverage guards; and claiming logic. That claiming logic later needed a fix for **claim starvation**, where long-running standard syncs could crowd out other work.
+- **Advisory locks per account, resource and mode**, so two workers never sync the same thing at once.
+- **Cursors and checkpoints**, so incremental syncs resume where they left off and backfills can run over date ranges without gaps.
+- **A dead-letter queue with triage**, so failures are visible and replayable instead of retried forever.
+- **A unified webhook registry** that finds Hostaway webhooks that have been disabled and re-enables them, reconciles state, and dedupes and requeues events.
+- **A Redis-backed rate limiter** in front of every Hostaway call.
+- **Two layers of data:** the raw API payloads are stored as received, and a normalized model on top is what the AI and the apps actually query.
+
+It syncs **42 Hostaway resource types**, and I added a second PMS adapter for Guesty (listings and reservations). It has **about 382 automated test cases** across 78 test files. I also built an internal operations console for it in Next.js, covering connection health, sync KPIs, the job queue, dead-letter triage, webhooks, and a browser for the mirrored data.
+
+## The hard part: messages nobody tells you about
+
+Because Hostaway's webhooks don't fire for outbound messages, a reply sent from inside Hostaway simply never showed up in the mirror until some other sync caught it. I noticed the lag myself. The obvious fix, polling everything constantly, would have burned the entire rate budget.
+
+Instead I built an **inbox freshness poller** with two tiers:
+
+- a **quick tier** every 2 minutes covering the 25 most recent conversations;
+- a **deep tier** every hour covering 100.
+
+It runs in its own parallel lane, so it isn't stuck behind backfills, and it's exempt from the stale-job watchdog. It fetches conversations and messages in a combined call to save requests, and its settings live in the database, so the cadence can be tuned without a redeploy. I worked out the cadence from Hostaway's rate budget rather than guessing.
+
+**Outbound message lag dropped from about 3–4 minutes to about 1 minute** (observed).
+
+## Results
+
+- A mirror holding **tens of thousands of reservations and hundreds of thousands of messages**, about 30 GB including raw payloads, kept in sync within the rate limit.
+- The data layer the AI assistant answers from, so its replies about reservations and revenue reflect the customer's actual data.
+- Failure modes that are visible (dead letters, health and readiness endpoints, alerting through n8n) instead of silent.
+
+## What I'd do differently
+
+- **Design for the webhook gap from day one.** I treated webhooks as the source of truth and polling as a fallback. For any third-party integration now, I'd assume webhooks are incomplete until proven otherwise, and budget polling from the start.
+- **Model the rate budget explicitly.** The limiter enforced the limit, but the split of the budget between backfills, syncs and the poller was implicit. Giving each lane an explicit share would have made the claim-starvation issue show up sooner.

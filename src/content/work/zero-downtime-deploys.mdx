@@ -1,0 +1,42 @@
+import { Flow } from "@/components/Flow";
+
+## Context
+
+Early on, a deploy of The Host Desk meant replacing the running API. For the time that took, requests failed. When users started reporting that they couldn't submit requests during releases, it stopped being acceptable. We shipped often, so every release was a small outage.
+
+We ran on our own Linux VMs, provisioned by the company's IT team. I owned everything from the containers up: CI/CD, Nginx, and runtime configuration. There was no managed platform with blue-green built in, so in January 2026 I built it into our GitHub Actions pipeline.
+
+## Design
+
+<Flow
+  title="Blue-green release, per environment"
+  steps={[
+    { label: "Build image", note: "GitHub Actions, self-hosted runner" },
+    { label: "Start the idle colour", note: "Blue or green, on its own port" },
+    { label: "Health gate", note: "HTTP 200 and database + Redis ok, with retries" },
+    { label: "Switch Nginx upstream", note: "Validate config, then reload" },
+    { label: "Retire old colour", note: "Then deploy workers" },
+  ]}
+/>
+
+- **Two colours per environment, on fixed ports.** Production and staging each have a blue and a green container. The pipeline reads which port Nginx currently points at, and starts the new release on the other one.
+- **A health gate that checks dependencies, not just the process.** The new container must return HTTP 200 from its health endpoint, and the response must report both **the database and Redis as ok**. It retries a few times before giving up. A container that starts but can't reach Postgres never takes traffic.
+- **Cutover is an Nginx reload.** The pipeline rewrites the upstream to the new port, validates the config, and reloads. Reloading lets existing connections finish instead of dropping them.
+- **Automatic rollback.** If the health check fails, the old colour simply keeps serving, and the new container is removed. If the Nginx switch fails, the pipeline restores the previous config, and restarts the last known-good image tag if nothing is serving.
+- **Workers follow the web cutover.** Background workers don't serve HTTP, so they're replaced only after the web switch succeeds.
+- **Recent image tags are kept** so there's always a previous version to fall back to. Every run writes a summary of what happened to the job output.
+
+## Trade-offs
+
+- **Migrations have to be backward-compatible.** For a short time, old and new code run against the same schema, so destructive changes have to be split across releases. That's the real price of zero downtime.
+- **Health checks catch broken starts, not broken behaviour.** A release that boots, connects, and has a logic bug will pass the gate.
+
+## Results
+
+- **Releases stopped interrupting users.** Deploying became a routine step rather than something to schedule around.
+- A release that can't reach its dependencies never takes traffic, and a failed switch puts the previous version back without anyone touching the server.
+
+## What I'd do differently
+
+- **Keep the old colour warm for a few minutes after cutover.** Today the old container is retired as soon as the switch succeeds. Keeping it running briefly would make reverting a bad-but-healthy release a single Nginx switch instead of a redeploy.
+- **Add a smoke test after the switch.** A couple of real read-only requests through Nginx would catch the class of bug that health checks can't.

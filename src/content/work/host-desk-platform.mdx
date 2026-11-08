@@ -1,0 +1,68 @@
+import { Flow } from "@/components/Flow";
+
+## Context
+
+The Host Desk is a SaaS for short-term-rental owners. An owner connects their Hostaway account, and the platform turns reservations into operational work: cleanings, trash runs, repairs. That work goes to vetted vendors, who quote it, do it, prove it with photos, and get paid through the platform.
+
+I joined Falcon Global Services in September 2024, when the codebase was close to empty. The first feature I built was login. Over the next two years I wrote roughly three-quarters of the backend and the web portal (about 77% and 75% of commits respectively), and from March 2025 I led the team that built the rest.
+
+## What I built
+
+The backend is a TypeScript and Express API on Prisma and PostgreSQL. It grew to **218 data models**, **about 523 route handlers**, and more than 15 background workers. It serves six roles: administrator, customer service, client, vendor, sub-vendor, and operations.
+
+### The work-order marketplace
+
+This is the largest module, at about 20,000 lines, and the core of the business. A job moves through:
+
+<Flow
+  title="Work-order lifecycle with Stripe Connect"
+  steps={[
+    { label: "Quote request", note: "Owner, or a reservation automation" },
+    { label: "Vendor quote" },
+    { label: "Acceptance", note: "Card authorized via SetupIntent" },
+    { label: "Work + photo proof" },
+    { label: "Review", note: "Disputes, change requests, extra fees" },
+    { label: "Charge + payout", note: "PaymentIntent, platform fee, Connect transfer" },
+  ]}
+/>
+
+Some details that took the most care:
+
+- **Money moves only at the end.** The card is authorized when the owner accepts, and charged only after the work is reviewed. The platform fee is kept as an application fee, and the vendor's share goes out as a Stripe Connect transfer.
+- **Reality changes mid-job.** When a guest cancels a Hostaway reservation, any work orders tied to it are cancelled automatically, so a vendor is never sent to clean a stay that no longer exists.
+- **Vendors are businesses, not individuals.** A vendor company has sub-vendor crews, assigned to jobs by grade: primary, secondary, tertiary, backup, specialist. That modelling choice touches assignment, notifications, payouts and permissions.
+
+### Everything around it
+
+- **Reservation-driven automation:** work orders created automatically from incoming reservations, with versioned per-property settings.
+- **Billing:** Stripe subscriptions, per-property plans, and admin overrides.
+- **Identity:** JWT auth with OTP and the full password lifecycle, role-based access control, and a short-lived Redis session cache.
+- **Onboarding:** property questionnaires mapped to Hostaway fields, with PDF export, plus public guidebooks.
+- **Integrations:** Hostaway (API proxy and webhooks), ClickUp (support tickets become tasks with escalation), Shopify (supply reorders through the Admin GraphQL API), HubSpot, and n8n.
+- **Real-time:** chat and notifications. I moved these from Pusher to self-hosted Socket.IO with a Redis adapter once we started hitting Pusher's daily message caps.
+
+The web portal is React, TypeScript and Vite, with TanStack Query and MUI. It has **107 routes** with role-based layouts for all six roles, and ships in English and Chinese.
+
+## Decisions I owned
+
+1. **Rewriting the backend before launch.** The original backend was plain JavaScript on Express, with raw `mssql` queries. In January 2025, while there were no real users yet, I converted it to TypeScript and Prisma, and rewrote data access, error handling and middleware. Doing it before launch made it cheap. A year later it made the database migration possible.
+2. **Background work without a queue library.** Jobs, emails and payment transactions run from Postgres-backed queue tables, with a distributed lock table and polling workers, plus Redis pub/sub for fan-out. That meant one less piece of infrastructure to run, and the job state can be queried with plain SQL.
+3. **Moving to self-hosted PostgreSQL**, written up separately in [the migration case study](/work/postgres-migration).
+4. **Zero-downtime deploys**, written up separately in [the deploys case study](/work/zero-downtime-deploys).
+
+## Leading while building
+
+From March 2025 I was Associate Web Development Manager, which in practice meant technical lead of four people: two UI/UX designers, a developer, and QA. I reviewed and approved the team's PRs, planned sprints, assigned work, gave performance feedback, and reported to the project manager and CEO.
+
+I stayed the main engineer throughout. The balance I aimed for was to own the risky, cross-cutting work myself (payments, data layer, deploys) and hand off well-bounded features with a clear review standard.
+
+## Results
+
+- A production marketplace that has processed **thousands of work orders** and **five-figure payment volume** through Stripe Connect.
+- A backend that went from a login screen to 218 models and stayed in production as the company planned its next-generation platform.
+- Platform decisions (TypeScript, Prisma, Postgres, blue-green deploys, Socket.IO) that each removed a recurring problem rather than adding a new one.
+
+## What I'd do differently
+
+- **Add test coverage earlier on the money path.** The backend has about 80 tests, mostly integration tests. Payments and work-order state are where I would have wanted many more, and sooner.
+- **Write decisions down as they're made.** Most of the reasoning above lived in my head and in PR descriptions. Short decision records would have made onboarding and handover much easier.

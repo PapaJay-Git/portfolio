@@ -35,7 +35,7 @@ export const caseStudies: CaseStudy[] = [
     summary:
       "Workers, distributed locks, and a request budget for an API that throttles hard, plus a poller to cover what its webhooks never send. The mirror is the data layer behind the company's AI assistant.",
     role: "Sole engineer",
-    period: "2025 – 2026",
+    period: "Mar – Oct 2026",
     stack: ["TypeScript", "PostgreSQL", "Docker", "Hostaway API"],
     outcome: "Hundreds of thousands of messages and tens of thousands of reservations kept in sync",
   },
@@ -43,9 +43,9 @@ export const caseStudies: CaseStudy[] = [
     slug: "zero-downtime-deploys",
     title: "Blue-green deploys with Docker and an Nginx switch",
     summary:
-      "Users couldn't submit requests while we deployed. I replaced restart-in-place with health-gated blue-green releases on our own runners, so no release has to take the site down.",
+      "Users couldn't submit requests while we deployed. I replaced in-place releases with health-gated blue-green deploys and automatic rollback, running on our own CI runners.",
     role: "Designed and built",
-    period: "2025",
+    period: "Jan 2026",
     stack: ["Docker", "Nginx", "GitHub Actions", "Self-hosted runners"],
     outcome: "Releases no longer interrupt users",
   },

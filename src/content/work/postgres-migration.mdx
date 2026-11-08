@@ -1,0 +1,47 @@
+import { Flow } from "@/components/Flow";
+
+## Context
+
+By late 2025 The Host Desk ran on SQL Server through Prisma. That worked, but three things pushed us to move:
+
+- **Cost.** We were paying for a database while already running our own VMs.
+- **Latency.** The app and the database sat on different infrastructure, and our heaviest queries took about five seconds.
+- **AI access.** The company's AI assistant needed to read our operational data continuously. Postgres, on our own hardware, with good tooling, was the far easier place to give it that access.
+
+I made the call to move to self-hosted PostgreSQL, and in January 2026 I did the migration alone. Our IT team provisioned the database VMs; everything from the schema up was mine.
+
+## Constraints
+
+- **No dedicated migration team or tooling budget.** One engineer, during normal feature work.
+- **A live product with real customers.** Some downtime was acceptable, but only in a window when nobody was using it.
+- **No room for silent data loss.** Work orders and payment records had to arrive intact, not "mostly".
+
+## Approach
+
+The year before, the backend had moved from raw `mssql` queries to Prisma, so the application was already largely database-agnostic. The migration was mostly about **data and behaviour**, not rewriting the app.
+
+<Flow
+  title="Cutover plan"
+  steps={[
+    { label: "Port schema", note: "Prisma provider → postgresql, fix type differences" },
+    { label: "Export tooling", note: "Schema-aware, table by table" },
+    { label: "Scheduled window", note: "A few hours, no active customers" },
+    { label: "Load + verify", note: "Side-by-side against a backup" },
+    { label: "Switch app", note: "Point services at Postgres" },
+  ]}
+/>
+
+- **Schema-aware export.** Instead of a generic dump-and-restore across engines, I wrote tooling that understood our schema, so types, nullability and relationships came across correctly. In total that was about 300–400 MB of data.
+- **Verification before switching.** After loading, I checked the result against a side-by-side backup of the original before any traffic touched Postgres.
+- **Fixing what the move exposed.** With the database next to the app, the slow paths became obvious. I added indexes, removed N+1 query patterns, and rewrote the worst queries.
+
+## Results
+
+- **Major query latency went from about 5 seconds to under 1 second.** That's what I saw in the query browser and logs, not a formal benchmark. It came from co-location (one less network hop), better indexes, N+1 fixes and rewritten queries together. I won't pretend to split the credit precisely.
+- **Nothing broke after cutover.** The downtime stayed inside the planned window.
+- The AI assistant got a database it could read directly, which was the main reason for the move.
+
+## What I'd do differently
+
+- **Measure before and after properly.** "About 5 s to under 1 s" is honest, but a small benchmark of the ten heaviest queries before cutover would have turned an observation into a number I could defend in detail.
+- **Separate the performance work from the migration.** Doing the index and query work alongside the move was efficient, but it blurs which change bought which improvement.

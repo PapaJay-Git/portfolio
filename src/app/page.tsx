@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PostList } from "@/components/PostList";
 import { Section } from "@/components/Section";
 import { caseStudies } from "@/content/work";
 import { jobs } from "@/content/experience";
@@ -95,21 +96,7 @@ export default function HomePage() {
       </Section>
 
       <Section title="Writing" href="/writing" hrefLabel="All posts">
-        <ul className="divide-y divide-line">
-          {posts.map((post) => (
-            <li key={post.slug} className="py-5">
-              <Link href={`/writing/${post.slug}`} className="group block">
-                <h3 className="font-serif text-lg tracking-tight group-hover:text-accent">
-                  {post.title}
-                  {post.draft ? (
-                    <span className="ml-2 align-middle font-mono text-[10px] tracking-widest text-muted uppercase">Draft</span>
-                  ) : null}
-                </h3>
-                <p className="mt-1 text-sm leading-relaxed text-muted">{post.summary}</p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <PostList posts={posts} />
       </Section>
 
       <Section title="Contact">

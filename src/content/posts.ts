@@ -11,7 +11,7 @@ export const posts: Post[] = [
     slug: "the-rate-limiter-that-broke-my-users",
     title: "The rate limiter that broke my own users",
     summary:
-      "A wave of 429s, a feature I was sure was to blame, and a proxy setting that probably made every user share one bucket.",
+      "A wave of 429s, a feature I was sure was to blame, and what it taught me about sizing limits from real traffic.",
     date: "2026-11-15",
     draft: true,
   },

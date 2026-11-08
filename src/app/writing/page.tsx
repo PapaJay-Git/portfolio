@@ -5,7 +5,7 @@ import { posts } from "@/content/posts";
 export const metadata: Metadata = {
   title: "Writing",
   description: "Notes on production incidents, integrations, and migrations from building a SaaS platform.",
-  alternates: { canonical: "/writing" },
+  alternates: { canonical: "/writing", types: { "application/rss+xml": "/feed.xml" } },
 };
 
 export default function WritingPage() {

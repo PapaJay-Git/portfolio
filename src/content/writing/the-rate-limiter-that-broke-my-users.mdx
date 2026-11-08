@@ -1,0 +1,60 @@
+In late August 2025 I added tiered rate limiting to The Host Desk's API. It was meant as a security improvement. Over the following weeks, users started hitting errors, and I spent the first part of the investigation fixing the wrong thing.
+
+## The change
+
+Until then the API had a single global limiter. I replaced it with three tiers using `express-rate-limit`:
+
+```ts
+// August 2025
+export const burstLimiter = rateLimit({ windowMs: 1_000, max: 20 });
+export const sustainedLimiter = rateLimit({ windowMs: 15 * 60_000, max: 5_000 });
+export const sensitiveEndpointLimiter = rateLimit({ windowMs: 15 * 60_000, max: 5 }); // login, OTP, reset
+```
+
+The burst and sustained limiters applied to every request. The sensitive one guarded login, OTP and password reset. The numbers looked reasonable on paper: 20 requests a second is a lot for one person clicking around a dashboard.
+
+## The symptom
+
+Reports came in that saving didn't work, mostly from owners filling in property questionnaires. Those forms auto-save as you type, and we had just shipped a new version of them.
+
+That timing made the questionnaire feel like an obvious suspect. A form that saves on every change sends far more requests than one with a submit button. I went into the auto-save, fixed it, and shipped.
+
+The errors kept coming.
+
+## The actual signal
+
+What finally settled it was the browser's network tab. The failing requests weren't returning validation errors or 500s. They were returning **HTTP 429 Too Many Requests**. The questionnaire wasn't broken. My own limiter was rejecting it.
+
+I had skipped the first question I should have asked: *what status code is the failure?* I'd jumped from "saving fails on this screen" to "this screen's code is broken", because that screen was new and the limiter felt like a safe, finished change.
+
+## The fix
+
+I replaced the limits with ones sized for how the app actually behaves, not how I imagined one user behaves:
+
+```ts
+// September 2025
+export const burstLimiter = rateLimit({ windowMs: 1_000, max: 50 });
+export const sustainedLimiter = rateLimit({ windowMs: 15 * 60_000, max: 10_000 });
+export const sensitiveEndpointLimiter = rateLimit({ windowMs: 5 * 60_000, max: 50 });
+```
+
+A single page load in a React app with several queries in flight, plus an auto-saving form, can comfortably exceed 20 requests in a second. The sensitive limit of 5 attempts per 15 minutes was also stricter than it needed to be for real users mistyping a password or waiting on an OTP.
+
+The impact was small, because we still had relatively few users at the time. The same mistake at a larger scale would have been an outage.
+
+## Looking at it again
+
+Writing this up, I re-read the code from that period and found a detail that likely made things worse. The API ran on Azure App Service, behind the platform's own front-end proxy, and the app had:
+
+```ts
+app.set("trust proxy", false);
+```
+
+`express-rate-limit` keys requests by `req.ip`. With `trust proxy` off behind a proxy, `req.ip` is the proxy's address rather than the user's. Users could have been sharing a bucket, so one person's auto-save counted against everyone behind the same front end. That would explain how "20 per second" ran out with so few users. We set `trust proxy` correctly in January 2026, when the API moved to our own servers behind Nginx.
+
+## What I took from it
+
+- **Read the status code before reading the code.** A 429 points at infrastructure, a 4xx at the request, a 5xx at the server. Thirty seconds in the network tab would have saved me a fix nobody needed.
+- **Size limits from real traffic, not intuition.** Count what one real session sends, including background refetches and auto-saves, then leave generous headroom.
+- **Know what your limiter is keying on.** Behind any proxy, check `trust proxy`, then log `req.ip` once and confirm it's actually the client.
+- **"Safe" changes still need watching.** Security middleware goes in front of every request. That's exactly why it deserves the same monitoring as a feature launch.

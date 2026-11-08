@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: site.description,
     locale: "en_US",
   },
-  twitter: { card: "summary_large_image", title: site.title, description: site.description },
+  twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
 
